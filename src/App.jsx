@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import {Route, BrowserRouter} from 'react-router-dom'
 import Homepage from './Homepage.jsx'
-import Recipe from './Recipe.jsx'
+import Recipes from './Recipes.jsx'
+import Favorites from './Favorites.jsx'
 
 class App extends Component {
 
@@ -13,7 +14,13 @@ renderHomepage = () => {
 
 renderRecipe = () => {
     return (
-        <Recipe />
+        <Recipes />
+    )
+}
+
+renderFavorites = () => {
+    return (
+        <Favorites />
     )
 }
 
@@ -21,7 +28,8 @@ renderRecipe = () => {
         return (
             <BrowserRouter>
             <Route exact={true} path='/' render={this.renderHomepage} /> {/*renders the main home screen*/}
-            <Route exact={true} path='/recipe' render={this.renderRecipe} />
+            <Route exact={true} path='/recipes' render={this.renderRecipe} />
+            <Route exact={true} path='/favorites' render={this.renderFavorites} />
             </BrowserRouter>
         )
     }

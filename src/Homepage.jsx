@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
+import NavBar from './NavBar.jsx'
 class Homepage extends Component {
     render = () => {
         return (
-            <div>Welcome to my site!
-                <Link to='/recipe'><button>recipes! :D</button></Link>
+            <div className='containerAll'>
+                <NavBar />
+                Welcome to my site!
             </div>
             
         )

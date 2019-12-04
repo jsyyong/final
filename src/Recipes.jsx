@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
-class Recipe extends Component {
+import NavBar from './NavBar.jsx'
+class Recipes extends Component {
     render = () => {
+        console.log("inside recpie")
         return (
             <div>
+                <NavBar />
                 Welcome to the recipe page!
             </div>
         )
     }
 }
-export default Recipe
+export default Recipes
