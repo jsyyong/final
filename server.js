@@ -1,19 +1,170 @@
-let express = require('express')
-let app = express()
-let reloadMagic = require('./reload-magic.js')
+let express = require("express");
+let app = express();
+let reloadMagic = require("./reload-magic.js");
+let multer = require("multer"); ///handles http requests from form submissions. It places data in the body property of the request object
+let upload = multer({ dest: __dirname + "/uploads/" }); // we will be uploading images, signing up and logging in
+let cookieParser = require("cookie-parser");
+app.use(cookieParser());
+let passwords = {};
+let sessions = {};
+let MongoClient = require("mongodb").MongoClient; //used to initiate connection
+ObjectID = require("mongodb").ObjectID; //convert string to objectID
 
-reloadMagic(app)
+reloadMagic(app);
 
-app.use('/', express.static('build')); // Needed for the HTML and JS files
-app.use('/', express.static('public')); // Needed for local assets
-
+app.use("/", express.static("build")); // Needed for the HTML and JS files
+app.use("/uploads", express.static("uploads")); // Needed for local assets
+let dbo = undefined;
+let url =
+  "mongodb+srv://jeff:pwd123@cluster0-uckdj.mongodb.net/test?retryWrites=true&w=majority";
+MongoClient.connect(
+  url,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  (err, db) => {
+    dbo = db.db("media-board2");
+  }
+);
 // Your endpoints go after this line
+
+//Sessions Id Generator
+let generateId = () => {
+  return "" + Math.floor(Math.random() * 100000000);
+};
+
+//login endpoint
+app.post("/login", upload.none(), (req, res) => {
+  console.log("login", req.body);
+  let name = req.body.username;
+  let enteredPassword = req.body.password;
+  dbo.collection("users").findOne({ username: name }, (err, user) => {
+    if (err || user === null || user.password !== enteredPassword) {
+      console.log("/login error", err);
+      res.send(JSON.stringify({ success: false }));
+      return;
+    }
+    let sessionId = req.cookies.sessionId;
+    dbo.collection("user").findOne({ sessionId: sessionId }, (err, session) => {
+      if (session === null) {
+        let sessionId = generateId();
+        console.log("session", sessionId);
+        dbo
+          .collection("sessions")
+          .insertOne(
+            { username: name, sessionId: sessionId },
+            (error, insertedSession) => {
+              res.cookie("sessionId", sessionId);
+              res.send(JSON.stringify({ success: true, sessionId: sessionId }));
+            }
+          );
+      }
+    });
+    return;
+  });
+});
+
+//signup endpoint
+app.post("/signup", upload.none(), (req, res) => {
+  console.log("signup", req.body); //body is the data from signup from post component
+  let name = req.body.username;
+  let pwd = req.body.password;
+
+  //checks to see if the username exists in the database
+  dbo.collection("users").findOne({ username: name }, (err, user) => {
+    if (err || user !== null) {
+      console.log("/login error", err);
+      res.send(JSON.stringify({ success: false }));
+      return;
+    }
+    console.log(name + " is available!");
+
+    //creates a new username and sessionId
+    dbo
+      .collection("users")
+      .insertOne({ username: name, password: pwd }, (error, insertedUser) => {
+        let sessionId = generateId();
+        console.log("generated id", sessionId);
+
+        dbo
+          .collection("sessions")
+          .insertOne(
+            { username: name, sessionId: sessionId },
+            (error, insertedSession) => {
+              res.cookie("sessionId", sessionId);
+              res.send(JSON.stringify({ success: true, sessionId: sessionId }));
+            }
+          );
+      });
+    return;
+  });
+});
+
+//check-login endpoint
+app.post("/check-login", upload.none(), (req, res) => {
+  let sessionId = req.cookies.sessionId; //req.cookies.sessionId is obtained automatically (how?)
+  console.log("session id", sessionId);
+  dbo.collection("sessions").findOne({ sessionId: sessionId }, (err, user) => {
+    //'user' would be the whole object
+    if (err || user === null) {
+      console.log(
+        "/check-login failed, session probably does not exist anymore"
+      );
+      res.send(JSON.stringify({ success: false }));
+      return;
+    }
+    console.log("the name", user.username);
+    let username = user.username;
+    if (username !== undefined) {
+      res.send(
+        JSON.stringify({
+          success: true,
+          username: username,
+          sessionId: sessionId
+        })
+      );
+      return;
+    }
+    res.send(JSON.stringify({ success: false }));
+  });
+});
+
+//check-admins endpoint
+app.post("/check-admins", upload.none(), (req, res) => {
+  console.log("request to /check-admins");
+  dbo
+    .collection("admins")
+    .find({})
+    .toArray((err, admins) => {
+      if (err) {
+        console.log("error", err);
+        res.send(JSON.stringify({ success: false }));
+        return;
+      }
+      console.log("success! sending admins", admins);
+      res.send(JSON.stringify({ success: true, admins }));
+    });
+});
+
+//deleteSessionId endpoint
+app.post("/deleteSessionId", upload.none(), (req, res) => {
+  console.log("inside /deleteSessionId");
+  let sessionId = req.query.sessionId;
+  console.log("req query", sessionId);
+  dbo.collection("sessions").remove({ sessionId: sessionId }, err => {
+    if (err) {
+      console.log("/deleteSessionId fail");
+      res.send(JSON.stringify({ success: false }));
+    }
+    res.send(JSON.stringify({ success: true }));
+  });
+});
 
 // Your endpoints go before this line
 
-app.all('/*', (req, res, next) => { // needed for react router
-    res.sendFile(__dirname + '/build/index.html');
-})
+app.all("/*", (req, res, next) => {
+  // needed for react router
+  res.sendFile(__dirname + "/build/index.html");
+});
 
-
-app.listen(4000, '0.0.0.0', () => { console.log("Server running on port 4000") })
+app.listen(4000, "0.0.0.0", () => {
+  console.log("Server running on port 4000");
+});
