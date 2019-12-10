@@ -16,55 +16,6 @@ class unconnectedsubmitRecipe extends Component {
     };
   }
 
-  //reload method to reload state by sending fetch requests
-  reload = async () => {
-    let response = await fetch("/check-login", {
-      method: "POST",
-      credentials: "include"
-    });
-    let responseBody = await response.text();
-    console.log("responseBody from login", responseBody);
-    let body = JSON.parse(responseBody);
-    console.log("parsed body", body);
-    if (!body.success) {
-      console.log("cookie fail");
-      return;
-    }
-    console.log("cookie dispatchinng");
-    this.props.dispatch({
-      type: "set-username",
-      username: body.username,
-      sessionId: body.sessionId,
-      loggedIn: true
-    });
-  };
-
-  //reload admins
-  reloadAdmins = async () => {
-    let checkAdminResponse = await fetch("/check-admins", { method: "POST" });
-    let checkAdminResponseBody = await checkAdminResponse.text();
-    console.log("checking admins", checkAdminResponseBody);
-    let body = JSON.parse(checkAdminResponseBody);
-    if (!body.success) {
-      console.log("admin check failed");
-      return;
-    }
-    console.log("dispatching admins", body.admins);
-    let admins = body.admins;
-    admins.map(obj => {
-      this.props.dispatch({
-        type: "set-admins",
-        admins: obj.username
-      });
-    });
-  };
-
-  //component did mount method
-  componentDidMount = async () => {
-    this.reload();
-    await this.reloadAdmins();
-  };
-
   onChangeHandler = field => {
     return event => {
       console.log("inside onChangeHandler", event.target.value);
@@ -73,9 +24,31 @@ class unconnectedsubmitRecipe extends Component {
   };
 
   submitHandler = async event => {
-    event.preventDefault();
+    //event.preventDefault();
     console.log(this.state.firstname);
     console.log(this.state.lastname);
+    let data = new FormData();
+    data.append("file", this.state.file);
+    data.append("firstname", this.state.firstname);
+    data.append("lastname", this.state.lastname);
+    data.append("recipetitle", this.state.recipetitle);
+    data.append("numberofservings", this.state.numberofservings);
+    data.append("ingredients", this.state.ingredients);
+    data.append("directions", this.state.directions);
+    await fetch("/createRecipe", { method: "POST", body: data });
+    this.setState({ file: "" });
+    this.setState({ firstname: "" });
+    this.setState({ recipetitle: "" });
+    this.setState({ numberofservings: "" });
+    this.setState({ ingredients: "" });
+    this.setState({ directions: "" });
+    /*let response = await fetch("/recipes", { method: "POST" });
+    let body = await response.text();
+    body = JSON.parse(body);
+    console.log("/recipes response", body);
+    console.log("dispatching set-recipe");
+    this.props.dispatch({ type: "set-recipe", recipes: body });
+    //this.reload();*/
   };
 
   fileChangeHandler = event => {
@@ -125,7 +98,7 @@ class unconnectedsubmitRecipe extends Component {
           </div>
           Ingredients *
           <div>
-            <input
+            <textarea
               type="text"
               onChange={this.onChangeHandler("ingredients")}
               required
@@ -137,7 +110,7 @@ class unconnectedsubmitRecipe extends Component {
           </div>
           Directions *
           <div>
-            <input
+            <textarea
               type="text"
               onChange={this.onChangeHandler("directions")}
               required

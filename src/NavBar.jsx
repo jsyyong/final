@@ -12,6 +12,55 @@ class unconnectedNavBar extends Component {
       searchInput: ""
     };
   }
+  reload = async () => {
+    let checkLoginResponse = await fetch("/check-login", {
+      method: "POST",
+      credentials: "include"
+    });
+    let checkLoginResponseBody = await checkLoginResponse.text();
+    console.log("checkLoginResponseBody from login", checkLoginResponseBody);
+    let body = JSON.parse(checkLoginResponseBody);
+    console.log("parsed body", body);
+    if (!body.success) {
+      console.log("cookie fail");
+      return;
+    }
+    console.log("cookie dispatchinng");
+    this.props.dispatch({
+      type: "set-username",
+      username: body.username,
+      sessionId: body.sessionId,
+      loggedIn: true
+    });
+  };
+
+  reloadRecipes = async () => {
+    //let name = this.state.username;
+    let response = await fetch("/recipes", { method: "POST" });
+    let body = await response.text();
+    body = JSON.parse(body);
+    console.log("/recipes response", body);
+    this.props.dispatch({ type: "set-recipe", recipes: body });
+  };
+
+  reloadAdmins = async () => {
+    let checkAdminResponse = await fetch("/check-admins", { method: "POST" });
+    let checkAdminResponseBody = await checkAdminResponse.text();
+    console.log("checking admins", checkAdminResponseBody);
+    let body = JSON.parse(checkAdminResponseBody);
+    if (!body.success) {
+      console.log("admin check failed");
+      return;
+    }
+    console.log("dispatching admins", body.admins);
+    let admins = body.admins;
+    admins.map(obj => {
+      this.props.dispatch({
+        type: "set-admins",
+        admins: obj.username
+      });
+    });
+  };
 
   renderJoin = () => {
     console.log("disatching join");
@@ -45,9 +94,15 @@ class unconnectedNavBar extends Component {
   };
 
   welcomeOrNothing = () => {
-    let welcomeOrNothing = <div>Welcome, {this.props.username}!</div>;
+    let username = this.props.username;
+    console.log("list of admins", this.props.admins);
+    console.log("inside welcome or nothing", this.props.admins[username]);
+    let welcomeOrNothing = <div>Welcome, {username}!</div>;
     if (!this.props.loggedIn) {
       welcomeOrNothing = null;
+    } else if (this.props.loggedIn && this.props.admins[username]) {
+      console.log("admin", this.props.admins[username]);
+      welcomeOrNothing = <div>[Admin Privilege]Welcome, {username}!</div>;
     }
     return welcomeOrNothing;
   };
@@ -91,6 +146,15 @@ class unconnectedNavBar extends Component {
     //renders the <Search /> page
   };
 
+  componentDidMount = async () => {
+    console.log("reloading admins");
+    await this.reloadAdmins();
+    console.log("reloading states");
+    await this.reload();
+    console.log("reloading recipes");
+    await this.reloadRecipes();
+  };
+
   render = () => {
     return (
       <div className="container-nav">
@@ -129,7 +193,8 @@ let mapStateToProps = state => {
     recipesIsOpen: state.recipesIsOpen,
     username: state.username,
     loggedIn: state.loggedIn,
-    sessionId: state.sessionId
+    sessionId: state.sessionId,
+    admins: state.admins
   };
 };
 let NavBar = connect(mapStateToProps)(unconnectedNavBar);

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "./NavBar.jsx";
+import DeleteSingle from "./DeleteSingle.jsx";
 import { connect } from "react-redux";
 class unconnectedHomepage extends Component {
   //reload method to reload state by sending fetch requests
@@ -46,8 +47,15 @@ class unconnectedHomepage extends Component {
   };
   //component did mount method
   componentDidMount = async () => {
-    this.reload();
-    await this.reloadAdmins();
+    //this.reload();
+    //await this.reloadAdmins();
+  };
+
+  deleteOrNothing = recipes => {
+    let username = this.props.username;
+    let deleteOrNothing = <DeleteSingle recipe={recipes} />;
+    if (!this.props.admins[username]) deleteOrNothing = null;
+    return deleteOrNothing;
   };
 
   render = () => {
@@ -55,23 +63,26 @@ class unconnectedHomepage extends Component {
       <div className="containerAll">
         <NavBar />
         <div>Welcome to my site!</div>
+        <div>Recent Recipes</div>
         <div>
-          {/*this.props.recipes.map(recipes => (
+          {this.props.recipes.map(recipes => (
             <div key={"f" + recipes._id}>
               <Link to={"/recipedetail/" + recipes._id}>
                 <img height="100px" src={recipes.imgPath} />
               </Link>
+              {this.deleteOrNothing(recipes)}
             </div>
-          ))*/}
+          ))}
         </div>
-        <div>Recent Recipes</div>
       </div>
     );
   };
 }
 let mapStateToProps = state => {
   return {
-    recipes: state.recipes
+    recipes: state.recipes,
+    admins: state.admins,
+    username: state.username
   };
 };
 let Homepage = connect(mapStateToProps)(unconnectedHomepage);

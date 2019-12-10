@@ -158,6 +158,64 @@ app.post("/deleteSessionId", upload.none(), (req, res) => {
   });
 });
 
+//deleteSingle endpoint
+app.post("/deleteSingle", upload.none(), (req, res) => {
+  console.log("inside /deleteSingle");
+  let imgPath = req.query.imgPath;
+  console.log("req query", imgPath);
+  dbo.collection("recipes").remove({ imgPath: imgPath }, err => {
+    if (err) {
+      console.log("/deleteSingle fail");
+      res.send(JSON.stringify({ success: false }));
+    }
+    res.send(JSON.stringify({ success: true }));
+  });
+});
+
+//recipes endpoint
+app.post("/recipes", upload.none(), (req, res) => {
+  console.log("request to /recipes");
+  // let name = req.query.username;
+  // console.log("query username:", name);
+  console.log("querystring", req.query);
+  dbo
+    .collection("recipes")
+    .find(req.query) //sort by everything the seller is selling. later on we will sort his wishlist and purchases
+    // .find({})
+    .toArray((err, recipes) => {
+      if (err) {
+        console.log("error", err);
+        res.send(JSON.stringify({ success: false }));
+        return;
+      }
+      console.log("recipe detail object", recipes);
+      res.send(JSON.stringify(recipes));
+    });
+});
+
+//createRecipe endpoint
+app.post("/createRecipe", upload.single("file"), (req, res) => {
+  console.log("request to /createRecipe. body: ", req.body);
+  let firstname = req.body.firstname;
+  let lastname = req.body.lastname;
+  let recipetitle = req.body.recipetitle;
+  let numberofservings = req.body.numberofservings;
+  let ingredients = req.body.ingredients;
+  let directions = req.body.directions;
+  let file = req.file; // the image file
+  let frontendPath = "/uploads/" + file.filename; //what is filename?
+  dbo.collection("recipes").insertOne({
+    firstname: firstname,
+    lastname: lastname,
+    recipetitle: recipetitle,
+    numberofservings: numberofservings,
+    ingredients: ingredients,
+    directions: directions,
+    imgPath: frontendPath
+  });
+  res.send(JSON.stringify({ success: true }));
+});
+
 // Your endpoints go before this line
 
 app.all("/*", (req, res, next) => {

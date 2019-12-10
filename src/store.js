@@ -42,6 +42,18 @@ let reducer = (state, action) => {
     return { ...state, admins: admins };
   }
 
+  if (action.type === "set-recipe") {
+    return { ...state, recipes: action.recipes };
+  }
+
+  if (action.type === "set-recipedetail") {
+    return { ...state, recipedetail: action.recipedetail };
+  }
+
+  if (action.type === "set-recipeid") {
+    return { ...state, recipeid: action.recipeid };
+  }
+
   return state;
 };
 
@@ -54,8 +66,10 @@ let store = createStore(
     showLogin: false,
     username: "",
     sessionId: "",
-    admins: "",
-    recipes: []
+    admins: {},
+    recipes: [],
+    recipedetail: {},
+    recipeid: ""
   },
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
