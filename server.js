@@ -160,7 +160,7 @@ app.post("/deleteSessionId", upload.none(), (req, res) => {
 
 //deleteSingle endpoint
 app.post("/deleteSingle", upload.none(), (req, res) => {
-  console.log("inside /deleteSingle");
+  console.log("inside /deleteSingle", req.query);
   let imgPath = req.query.imgPath;
   console.log("req query", imgPath);
   dbo.collection("recipes").remove({ imgPath: imgPath }, err => {
@@ -177,7 +177,7 @@ app.post("/recipes", upload.none(), (req, res) => {
   console.log("request to /recipes");
   // let name = req.query.username;
   // console.log("query username:", name);
-  console.log("querystring", req.query);
+  console.log("req query!", req.query);
   dbo
     .collection("recipes")
     .find(req.query) //sort by everything the seller is selling. later on we will sort his wishlist and purchases
@@ -202,16 +202,42 @@ app.post("/createRecipe", upload.single("file"), (req, res) => {
   let numberofservings = req.body.numberofservings;
   let ingredients = req.body.ingredients;
   let directions = req.body.directions;
+  let uploader = req.body.uploader;
   let file = req.file; // the image file
   let frontendPath = "/uploads/" + file.filename; //what is filename?
-  dbo.collection("recipes").insertOne({
+  dbo.collection(req.query.collection).insertOne({
     firstname: firstname,
     lastname: lastname,
     recipetitle: recipetitle,
     numberofservings: numberofservings,
     ingredients: ingredients,
     directions: directions,
+    uploader: uploader,
     imgPath: frontendPath
+  });
+  res.send(JSON.stringify({ success: true }));
+});
+
+//createFavoriteRecipe
+app.post("/createFavoriteRecipe", upload.none(), (req, res) => {
+  console.log("request to /createFavoriteRecipe. body: ", req.body);
+  let firstname = req.body.firstname;
+  let lastname = req.body.lastname;
+  let recipetitle = req.body.recipetitle;
+  let numberofservings = req.body.numberofservings;
+  let ingredients = req.body.ingredients;
+  let directions = req.body.directions;
+  let imgPath = req.body.imgPath;
+  let favoritedby = req.body.favoritedby;
+  dbo.collection(req.query.collection).insertOne({
+    firstname: firstname,
+    lastname: lastname,
+    recipetitle: recipetitle,
+    numberofservings: numberofservings,
+    ingredients: ingredients,
+    directions: directions,
+    favoritedby: favoritedby,
+    imgPath: imgPath
   });
   res.send(JSON.stringify({ success: true }));
 });

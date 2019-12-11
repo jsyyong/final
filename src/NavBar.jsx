@@ -43,6 +43,30 @@ class unconnectedNavBar extends Component {
     this.props.dispatch({ type: "set-recipe", recipes: body });
   };
 
+  reloadFavoriteRecipes = async () => {
+    let name = this.props.username;
+    console.log("inside my recipe~", this.props.username);
+    let response = await fetch("/favoriteRecipes?favoritedby=" + name, {
+      method: "POST"
+    });
+    let body = await response.text();
+    body = JSON.parse(body);
+    console.log("dispatching set-favoriteRecipe", body);
+    this.props.dispatch({ type: "set-favoriterecipe", favoriterecipe: body });
+  };
+
+  reloadUserRecipes = async () => {
+    let name = this.props.username;
+    console.log("inside my recipe~", this.props.username);
+    let response = await fetch("/recipes?uploader=" + name, {
+      method: "POST"
+    });
+    let body = await response.text();
+    body = JSON.parse(body);
+    console.log("dispatching set-userrecipe", body);
+    this.props.dispatch({ type: "set-userrecipe", userrecipe: body });
+  };
+
   reloadAdmins = async () => {
     let checkAdminResponse = await fetch("/check-admins", { method: "POST" });
     let checkAdminResponseBody = await checkAdminResponse.text();
@@ -153,6 +177,8 @@ class unconnectedNavBar extends Component {
     await this.reload();
     console.log("reloading recipes");
     await this.reloadRecipes();
+    console.log("reloading user recipes");
+    await this.reloadUserRecipes();
   };
 
   render = () => {

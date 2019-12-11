@@ -8,9 +8,24 @@ class unconnectedFavorites extends Component {
       <div>
         <NavBar />
         Welcome to the Favorites page!!
+        <div>
+          {/*this.props.favoriterecipe.map(recipes => (
+            <div key={"f" + recipes._id}>
+              <Link to={"/recipedetail/" + recipes._id}>
+                <img height="100px" src={recipes.imgPath} />
+              </Link>
+              {this.deleteOrNothing(recipes)}
+            </div>
+        ))*/}
+        </div>
       </div>
     );
   };
 }
-let Favorites = connect()(unconnectedFavorites);
+let mapStateToProps = state => {
+  return {
+    favoriterecipe: state.favoriterecipe
+  };
+};
+let Favorites = connect(mapStateToProps)(unconnectedFavorites);
 export default Favorites;

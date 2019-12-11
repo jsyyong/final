@@ -16,6 +16,15 @@ class unconnectedDeleteSingle extends Component {
     console.log("/recipes response", body);
     this.props.dispatch({ type: "set-recipe", recipes: body });
   };
+  reloadUserRecipes = async () => {
+    let name = this.props.username;
+    console.log("inside my recipe~", this.props.username);
+    let response = await fetch("/recipes?uploader=" + name, { method: "POST" });
+    let body = await response.text();
+    body = JSON.parse(body);
+    console.log("dispatching set-userrecipe", body);
+    this.props.dispatch({ type: "set-userrecipe", userrecipe: body });
+  };
 
   deleteHandler = async event => {
     let imgPath = this.state.recipe.imgPath;
@@ -27,6 +36,7 @@ class unconnectedDeleteSingle extends Component {
     let body = await response.json();
     console.log("deleteHandler body", body);
     this.reloadRecipes();
+    this.reloadUserRecipes();
   };
 
   render = () => {
@@ -37,5 +47,8 @@ class unconnectedDeleteSingle extends Component {
     );
   };
 }
-let DeleteSingle = connect()(unconnectedDeleteSingle);
+let mapStateToProps = state => {
+  return { username: state.username };
+};
+let DeleteSingle = connect(mapStateToProps)(unconnectedDeleteSingle);
 export default DeleteSingle;

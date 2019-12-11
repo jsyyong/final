@@ -12,7 +12,8 @@ class unconnectedsubmitRecipe extends Component {
       recipetitle: "",
       numberofservings: "",
       ingredients: "",
-      directions: ""
+      directions: "",
+      uploader: ""
     };
   }
 
@@ -35,7 +36,11 @@ class unconnectedsubmitRecipe extends Component {
     data.append("numberofservings", this.state.numberofservings);
     data.append("ingredients", this.state.ingredients);
     data.append("directions", this.state.directions);
-    await fetch("/createRecipe", { method: "POST", body: data });
+    data.append("uploader", this.props.username);
+    await fetch("/createRecipe?collection=recipes", {
+      method: "POST",
+      body: data
+    });
     this.setState({ file: "" });
     this.setState({ firstname: "" });
     this.setState({ recipetitle: "" });
@@ -127,7 +132,9 @@ class unconnectedsubmitRecipe extends Component {
     );
   };
 }
-let mapStateToProps = state => {};
+let mapStateToProps = state => {
+  return { username: state.username };
+};
 
 let submitRecipe = connect(mapStateToProps)(unconnectedsubmitRecipe);
 export default submitRecipe;

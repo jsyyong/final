@@ -24,6 +24,24 @@ class unconnectedRecipeDetails extends Component {
     this.setState({ recipe: recipe[0] });
   };
 
+  addToFavoriteHandler = async event => {
+    let data = new FormData();
+    let recipe = this.state.recipe;
+    console.log("recipe object:", recipe);
+    data.append("imgPath", recipe.imgPath);
+    data.append("firstname", recipe.firstname);
+    data.append("lastname", recipe.lastname);
+    data.append("recipetitle", recipe.recipetitle);
+    data.append("numberofservings", recipe.numberofservings);
+    data.append("ingredients", recipe.ingredients);
+    data.append("directions", recipe.directions);
+    data.append("favoritedby", this.props.username);
+    await fetch("/createFavoriteRecipe?collection=favorites", {
+      method: "POST",
+      body: data
+    });
+  };
+
   componentDidMount = () => {
     console.log("reloading recipe details");
     this.reloadRecipesDetails();
@@ -39,12 +57,17 @@ class unconnectedRecipeDetails extends Component {
         <div>
           <img height="100px" src={recipe.imgPath} />
         </div>
+        <button onClick={this.addToFavoriteHandler}>Add to Favorites!</button>
       </div>
     );
   };
 }
 let mapStateToProps = state => {
-  return { recipedetail: state.recipedetail, recipeid: state.recipeid };
+  return {
+    recipedetail: state.recipedetail,
+    recipeid: state.recipeid,
+    username: state.username
+  };
 };
 let RecipeDetails = connect(mapStateToProps)(unconnectedRecipeDetails);
 export default RecipeDetails;

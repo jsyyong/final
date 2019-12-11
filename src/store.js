@@ -54,6 +54,14 @@ let reducer = (state, action) => {
     return { ...state, recipeid: action.recipeid };
   }
 
+  if (action.type === "set-userrecipe") {
+    return { ...state, userrecipe: action.userrecipe };
+  }
+
+  if (action.type === "set-favoriterecipe") {
+    return { ...state, favoriterecipe: action.favoriterecipe };
+  }
+
   return state;
 };
 
@@ -69,7 +77,9 @@ let store = createStore(
     admins: {},
     recipes: [],
     recipedetail: {},
-    recipeid: ""
+    recipeid: "",
+    userrecipe: [],
+    favoriterecipe: []
   },
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
