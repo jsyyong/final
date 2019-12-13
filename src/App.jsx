@@ -7,6 +7,7 @@ import Favorites from "./Favorites.jsx";
 import MyRecipes from "./MyRecipes.jsx";
 import SubmitRecipe from "./SubmitRecipe.jsx";
 import RecipeDetails from "./RecipeDetails.jsx";
+import SearchResults from "./SearchResults.jsx";
 
 class unconnectedApp extends Component {
   renderHomepage = () => {
@@ -29,6 +30,10 @@ class unconnectedApp extends Component {
     return <SubmitRecipe />;
   };
 
+  renderSearchResults = () => {
+    return <SearchResults />;
+  };
+
   renderRecipeDetails = routerData => {
     let recipeId = routerData.match.params.rid;
     console.log("recipe id", recipeId);
@@ -39,7 +44,7 @@ class unconnectedApp extends Component {
     console.log("recipe id", recipeId);
     this.props.dispatch({ type: "set-recipedetail", recipedetail: recipe });
     this.props.dispatch({ type: "set-recipeid", recipeid: recipeId });
-    return <RecipeDetails RECIPEID={recipeId} RECIPE={recipe}/>;
+    return <RecipeDetails RECIPEID={recipeId} RECIPE={recipe} />;
   };
 
   render = () => {
@@ -59,6 +64,11 @@ class unconnectedApp extends Component {
           exact={true}
           path="/recipedetail/:rid"
           render={this.renderRecipeDetails}
+        />
+        <Route
+          exact={true}
+          path="/searchResults"
+          render={this.renderSearchResults}
         />
       </BrowserRouter>
     );

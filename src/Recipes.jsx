@@ -10,8 +10,7 @@ class unconnectedRecipes extends Component {
   render = () => {
     let renderRecipes = (
       <div>
-        {/*<NavBar />*/}
-        Welcome to the recipe page! <div>Occasion | Special Diet | Easy</div>
+        Welcome to the recipe page! <div>Dessert | Pasta | Easy</div>
         <button onClick={this.renderRecipesOff}>x</button>
       </div>
     );

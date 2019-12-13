@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import Join from "./Join.jsx";
 import { connect } from "react-redux";
 import Recipes from "./Recipes.jsx";
+import Search from "./Search.jsx";
+import Messages from "./Messages.jsx";
 
 class unconnectedNavBar extends Component {
   constructor(props) {
@@ -43,15 +45,31 @@ class unconnectedNavBar extends Component {
     this.props.dispatch({ type: "set-recipe", recipes: body });
   };
 
+  reloadMessages = async () => {
+    this.props.dispatch({
+      type: "set-messages",
+      messages: "Loading Messages..."
+    });
+  };
+
+  reloadPromoRecipe = async () => {
+    //let name = this.state.username;
+    let response = await fetch("/promorecipe", { method: "POST" });
+    let body = await response.text();
+    body = JSON.parse(body);
+    console.log("/promorecipes response", body);
+    this.props.dispatch({ type: "set-promorecipe", promorecipe: body });
+  };
+
   reloadFavoriteRecipes = async () => {
     let name = this.props.username;
     console.log("inside my recipe~", this.props.username);
-    let response = await fetch("/favoriteRecipes?favoritedby=" + name, {
+    let response = await fetch("/favoriterecipes?favoritedby=" + name, {
       method: "POST"
     });
     let body = await response.text();
     body = JSON.parse(body);
-    console.log("dispatching set-favoriteRecipe", body);
+    console.log("dispatching set-favoriterecipe", body);
     this.props.dispatch({ type: "set-favoriterecipe", favoriterecipe: body });
   };
 
@@ -109,7 +127,11 @@ class unconnectedNavBar extends Component {
   };
 
   joinOrLogout = () => {
-    let joinOrLogout = <button onClick={this.logoutHandler}>Logout</button>;
+    let joinOrLogout = (
+      <Link to="/">
+        <button onClick={this.logoutHandler}>Logout</button>
+      </Link>
+    );
 
     if (!this.props.loggedIn) {
       joinOrLogout = <button onClick={this.renderJoin}>Join</button>;
@@ -171,14 +193,19 @@ class unconnectedNavBar extends Component {
   };
 
   componentDidMount = async () => {
-    console.log("reloading admins");
+    await console.log("reloading admins");
     await this.reloadAdmins();
-    console.log("reloading states");
+    await console.log("reloading states");
     await this.reload();
-    console.log("reloading recipes");
+    await console.log("reloading recipes");
     await this.reloadRecipes();
-    console.log("reloading user recipes");
+    await console.log("reloading user recipes");
     await this.reloadUserRecipes();
+    await console.log("reloading favorite recipe");
+    await this.reloadFavoriteRecipes();
+    await console.log("reloading promo recipe");
+    await this.reloadPromoRecipe();
+    //this.reloadMessages();
   };
 
   render = () => {
@@ -197,14 +224,7 @@ class unconnectedNavBar extends Component {
           {/* Favorites button */}
           This is the navigation bar!
           {this.joinOrLogout()} {/* renders Join or Logout button */}
-          <form onSubmit={this.searchResults}>
-            <input
-              type="text"
-              onChange={this.searchChange}
-              placeholder="Search"
-            ></input>
-            <input type="submit" value="o" />
-          </form>
+          <Search />
         </div>
         <Join />{" "}
         {/* conditionnal rennder. if joinIsOpen is true, it will render; else it is null */}

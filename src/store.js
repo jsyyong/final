@@ -62,6 +62,42 @@ let reducer = (state, action) => {
     return { ...state, favoriterecipe: action.favoriterecipe };
   }
 
+  if (action.type === "hide-favoritesbutton") {
+    return { ...state, insideFavorites: true };
+  }
+
+  if (action.type === "show-favoritesbutton") {
+    return { ...state, insideFavorites: false };
+  }
+
+  if (action.type === "set-messages") {
+    return { ...state, messages: action.messages };
+  }
+
+  if (action.type === "search-query") {
+    return { ...state, searchQuery: action.searchQuery };
+  }
+
+  if (action.type === "set-searchResults") {
+    return { ...state, searchResults: action.searchResults };
+  }
+
+  if (action.type === "set-searchInput") {
+    return { ...state, searchInput: action.searchInput };
+  }
+
+  if (action.type === "inside-searchresult-true") {
+    return { ...state, insideSearchResults: true };
+  }
+
+  if (action.type === "inside-searchresult-false") {
+    return { ...state, insideSearchResults: false };
+  }
+
+  if (action.type === "set-promorecipe") {
+    return { ...state, promorecipe: action.promorecipe };
+  }
+
   return state;
 };
 
@@ -78,8 +114,15 @@ let store = createStore(
     recipes: [],
     recipedetail: {},
     recipeid: "",
+    promorecipe: [],
     userrecipe: [],
-    favoriterecipe: []
+    favoriterecipe: [],
+    insideFavorites: false,
+    messages: [],
+    searchQuery: "",
+    searchResults: [],
+    searchInput: "",
+    insideSearchResults: false
   },
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );

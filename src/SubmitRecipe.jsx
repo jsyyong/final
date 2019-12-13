@@ -19,6 +19,8 @@ class unconnectedsubmitRecipe extends Component {
 
   onChangeHandler = field => {
     return event => {
+      if (event.target.value === event.shiftKey)
+        console.log("shift key was pressed!");
       console.log("inside onChangeHandler", event.target.value);
       this.setState({ [field]: event.target.value });
     };
@@ -56,8 +58,42 @@ class unconnectedsubmitRecipe extends Component {
     //this.reload();*/
   };
 
+  submitHandlerAdmin = async event => {
+    console.log("admin999");
+    //event.preventDefault();
+    console.log(this.state.firstname);
+    console.log(this.state.lastname);
+    let data = new FormData();
+    data.append("file", this.state.file);
+    data.append("firstname", this.state.firstname);
+    data.append("lastname", this.state.lastname);
+    data.append("recipetitle", this.state.recipetitle);
+    data.append("numberofservings", this.state.numberofservings);
+    data.append("ingredients", this.state.ingredients);
+    data.append("directions", this.state.directions);
+    data.append("uploader", this.props.username);
+    await fetch("/createRecipe?collection=promorecipe", {
+      method: "POST",
+      body: data
+    });
+    this.setState({ file: "" });
+    this.setState({ firstname: "" });
+    this.setState({ recipetitle: "" });
+    this.setState({ numberofservings: "" });
+    this.setState({ ingredients: "" });
+    this.setState({ directions: "" });
+  };
+
   fileChangeHandler = event => {
     this.setState({ file: event.target.files[0] });
+  };
+
+  renderAdminSubmit = () => {
+    let renderAdminSubmit = (
+      <button onClick={this.submitHandlerAdmin}>Submit as Promotional</button>
+    );
+    if (!this.props.admins[this.props.username]) renderAdminSubmit = null;
+    return renderAdminSubmit;
   };
 
   render = () => {
@@ -128,12 +164,13 @@ class unconnectedsubmitRecipe extends Component {
           </div>
           <input type="submit" value="Submit" />
         </form>
+        {this.renderAdminSubmit()}
       </div>
     );
   };
 }
 let mapStateToProps = state => {
-  return { username: state.username };
+  return { username: state.username, admins: state.admins };
 };
 
 let submitRecipe = connect(mapStateToProps)(unconnectedsubmitRecipe);

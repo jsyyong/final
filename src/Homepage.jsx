@@ -45,10 +45,21 @@ class unconnectedHomepage extends Component {
       });
     });
   };
+
+  leavingFavorites = () => {
+    console.log("dispatching show-favoritesbutton");
+    this.props.dispatch({ type: "show-favoritesbutton" });
+  };
+
+  leavingSearchResults = () => {
+    console.log("dispatching inside-searchresult-false");
+    this.props.dispatch({ type: "inside-searchresult-false" });
+  };
+
   //component did mount method
   componentDidMount = async () => {
-    //this.reload();
-    //await this.reloadAdmins();
+    this.leavingFavorites();
+    this.leavingSearchResults();
   };
 
   deleteOrNothing = recipes => {
@@ -63,12 +74,20 @@ class unconnectedHomepage extends Component {
       <div className="containerAll">
         <NavBar />
         <div>Welcome to my site!</div>
+        {this.props.promorecipe.map(recipes => (
+          <div key={"f" + recipes._id}>
+            <Link to={"/recipedetail/" + recipes._id}>
+              <img height="200px" src={recipes.imgPath} />
+            </Link>
+            {this.deleteOrNothing(recipes)}
+          </div>
+        ))}
         <div>Recent Recipes</div>
         <div>
           {this.props.recipes.map(recipes => (
             <div key={"f" + recipes._id}>
               <Link to={"/recipedetail/" + recipes._id}>
-                <img height="100px" src={recipes.imgPath} />
+                <img width="250px" src={recipes.imgPath} />
               </Link>
               {this.deleteOrNothing(recipes)}
             </div>
@@ -82,7 +101,8 @@ let mapStateToProps = state => {
   return {
     recipes: state.recipes,
     admins: state.admins,
-    username: state.username
+    username: state.username,
+    promorecipe: state.promorecipe
   };
 };
 let Homepage = connect(mapStateToProps)(unconnectedHomepage);

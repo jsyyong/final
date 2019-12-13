@@ -42,7 +42,7 @@ class unconnectedDeleteSingle extends Component {
   render = () => {
     return (
       <button type="button" onClick={this.deleteHandler}>
-        x
+        x!
       </button>
     );
   };
