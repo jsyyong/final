@@ -19,6 +19,13 @@ class unconnectedRecipeDetails extends Component {
     return deleteOrNothing;
   };
 
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    if (this.props.RECIPEID !== prevProps.RECIPEID) {
+      this.reloadRecipesDetails();
+    }
+  }
+
   reloadRecipesDetails = async () => {
     let recipeId = this.props.RECIPEID;
     console.log("recipeid", recipeId);
@@ -119,6 +126,11 @@ class unconnectedRecipeDetails extends Component {
 
   preparation = str => {
     console.log("string:", str);
+    return str
+      ? str.split(",").map(step => {
+          return <div>{step}</div>;
+        })
+      : "err";
   };
 
   render = () => {
@@ -126,23 +138,27 @@ class unconnectedRecipeDetails extends Component {
     return (
       <div>
         <NavBar />
-        {console.log("inside recipe details", this.state.recipe)}
-        <h2>Welcome to the {recipe.recipetitle} page!!</h2>
+        {console.log(
+          "inside recipe details",
+          this.state.recipe,
+
+          typeof this.state.recipe.directions
+        )}
+        ,<h2>Welcome to the {recipe.recipetitle} page!!</h2>
         <div>
           <img width="250px" src={recipe.imgPath} />
         </div>
         {this.addToFavoriteOrNothing()}
         <div>
           Ingredients:
-          <div>{recipe.ingredients}</div>
+          <div>{this.preparation(recipe.ingredients)}</div>
         </div>
         <div>
           Preparation:
-          <div>{this.state.recipe.directions}</div>
+          <div>{this.preparation(recipe.directions)}</div>
         </div>
         <h2>Comments</h2>
         <Messages IMGPATH={recipe.imgPath} />
-
         {this.messageFormOrNothing(recipe.imgPath)}
         <div>Recent Recipes</div>
         {this.props.recipes.map(recipes => (

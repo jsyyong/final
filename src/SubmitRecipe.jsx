@@ -19,8 +19,6 @@ class unconnectedsubmitRecipe extends Component {
 
   onChangeHandler = field => {
     return event => {
-      if (event.target.value === event.shiftKey)
-        console.log("shift key was pressed!");
       console.log("inside onChangeHandler", event.target.value);
       this.setState({ [field]: event.target.value });
     };
