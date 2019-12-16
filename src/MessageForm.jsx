@@ -49,8 +49,12 @@ class unconnectedMessageForm extends Component {
       <div>
         <h4>Write a review for this recipe!</h4>
         <form onSubmit={this.submitHandler}>
-          <input onChange={this.inputHandler} value={this.state.message} />
-          <input type="submit" />
+          <textarea
+            id="text-box"
+            onChange={this.inputHandler}
+            value={this.state.message}
+          />
+          <input id="submit-button" type="submit" />
         </form>
       </div>
     );

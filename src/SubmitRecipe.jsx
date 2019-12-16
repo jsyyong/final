@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import NavBar from "./NavBar.jsx";
 import { connect } from "react-redux";
+import Footer from "./Footer.jsx";
 import { Link } from "react-router-dom";
 class unconnectedsubmitRecipe extends Component {
   constructor(props) {
@@ -98,71 +99,80 @@ class unconnectedsubmitRecipe extends Component {
     return (
       <div>
         <NavBar />
-        <div>Welcome to the submitRecipe page!!</div>
-        <form onSubmit={this.submitHandler}>
-          Name *
-          <div className="form-container">
-            <div className="firstname">
-              <input
-                type="text"
-                onChange={this.onChangeHandler("firstname")}
-                required
-              />
-              <div>First Name</div>
-            </div>
-            <div className="lastname">
-              <input
-                type="text"
-                onChange={this.onChangeHandler("lastname")}
-                required
-              />
-              <div>Last Name</div>
-            </div>
-          </div>
-          Recipe Title *
+        <div className="submit-recipe">
           <div>
-            <input
-              type="text"
-              onChange={this.onChangeHandler("recipetitle")}
-              required
-            />
+            <h2>Submit Your Recipe To TasteShare</h2>
+            <form onSubmit={this.submitHandler}>
+              Name *
+              <div className="form-container">
+                <div className="firstname">
+                  <input
+                    type="text"
+                    onChange={this.onChangeHandler("firstname")}
+                    required
+                  />
+                  <div>First Name</div>
+                </div>
+                <div className="lastname">
+                  <input
+                    type="text"
+                    onChange={this.onChangeHandler("lastname")}
+                    required
+                  />
+                  <div>Last Name</div>
+                </div>
+              </div>
+              Recipe Title *
+              <div>
+                <input
+                  type="text"
+                  onChange={this.onChangeHandler("recipetitle")}
+                  required
+                />
+              </div>
+              Number of Servings *
+              <div>
+                <input
+                  type="text"
+                  onChange={this.onChangeHandler("numberofservings")}
+                  required
+                />
+              </div>
+              Ingredients *
+              <div>
+                <textarea
+                  type="text"
+                  onChange={this.onChangeHandler("ingredients")}
+                  required
+                />
+                <div>
+                  Please put each ingredient and its measurement on its own
+                  line; separated by a backslash "/" (e.g "3 cups milk" should
+                  be on its own line.)
+                </div>
+              </div>
+              Directions *
+              <div>
+                <textarea
+                  type="text"
+                  onChange={this.onChangeHandler("directions")}
+                  required
+                />
+                <div>
+                  Please put each step on its own line separated by a backslash
+                  "/"
+                </div>
+              </div>
+              Upload a photo you took of the dish *
+              <div>
+                <input type="file" onChange={this.fileChangeHandler} required />
+              </div>
+              <input type="submit" value="Submit" />
+            </form>
+            {this.renderAdminSubmit()}
           </div>
-          Number of Servings *
-          <div>
-            <input
-              type="text"
-              onChange={this.onChangeHandler("numberofservings")}
-              required
-            />
-          </div>
-          Ingredients *
-          <div>
-            <textarea
-              type="text"
-              onChange={this.onChangeHandler("ingredients")}
-              required
-            />
-            <div>
-              Please put each ingredient and its measurement on its own line
-              (e.g "3 cups milk" should be on its own line.)
-            </div>
-          </div>
-          Directions *
-          <div>
-            <textarea
-              type="text"
-              onChange={this.onChangeHandler("directions")}
-              required
-            />
-            <div>Please put each step on its own line</div>
-          </div>
-          Upload a photo you took of the dish *
-          <div>
-            <input type="file" onChange={this.fileChangeHandler} required />
-          </div>
-          <input type="submit" value="Submit" />
-        </form>
-        {this.renderAdminSubmit()}
+        </div>
+        <Footer />
       </div>
     );
   };

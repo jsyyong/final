@@ -4,7 +4,7 @@ class unconnectedDeleteSingleFavorite extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recipe: this.props.recipe
+      recipe: this.props.RECIPE
     };
   }
 
@@ -26,7 +26,8 @@ class unconnectedDeleteSingleFavorite extends Component {
     });
     let body = await response.json();
     console.log("deleteHandler body", body);
-    this.reloadFavoriteRecipes();
+    //this.reloadFavoriteRecipes();
+    location.reload();
   };
 
   componentDidMount = () => {

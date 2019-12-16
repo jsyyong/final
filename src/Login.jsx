@@ -63,26 +63,28 @@ class unconnectedLogin extends Component {
 
   render = () => {
     let renderJoin = (
-      <div>
-        Login!
-        <form onSubmit={this.submitHandler}>
-          Username
-          <input
-            type="text"
-            onChange={this.usernameChange}
-            value={this.state.usernameInput}
-            placeholder="username"
-          />
-          Password
-          <input
-            type="password"
-            onChange={this.passwordChange}
-            value={this.state.passwordInput}
-            placeholder="password"
-          />
-          <input type="submit" value="Log me in!" />
-        </form>
-        <button onClick={this.renderLoginOff}>x</button>
+      <div className="banner">
+        <div>
+          <b>Login!</b>
+          <form onSubmit={this.submitHandler}>
+            Username
+            <input
+              type="text"
+              onChange={this.usernameChange}
+              value={this.state.usernameInput}
+              placeholder="username"
+            />
+            Password
+            <input
+              type="password"
+              onChange={this.passwordChange}
+              value={this.state.passwordInput}
+              placeholder="password"
+            />
+            <input type="submit" value="Log me in!" />
+          </form>
+          <button onClick={this.renderLoginOff}>x</button>
+        </div>
       </div>
     );
 

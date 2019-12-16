@@ -128,13 +128,23 @@ class unconnectedNavBar extends Component {
 
   joinOrLogout = () => {
     let joinOrLogout = (
-      <Link to="/">
-        <button onClick={this.logoutHandler}>Logout</button>
-      </Link>
+      <div className="navbar-logout">
+        <Link to="/">
+          <a href="#" id="nav" onClick={this.logoutHandler}>
+            Logout
+          </a>
+        </Link>
+      </div>
     );
 
     if (!this.props.loggedIn) {
-      joinOrLogout = <button onClick={this.renderJoin}>Join</button>;
+      joinOrLogout = (
+        <div>
+          <a href="#" id="nav" onClick={this.renderJoin}>
+            Join
+          </a>
+        </div>
+      );
     }
     return joinOrLogout;
   };
@@ -143,21 +153,29 @@ class unconnectedNavBar extends Component {
     let username = this.props.username;
     console.log("list of admins", this.props.admins);
     console.log("inside welcome or nothing", this.props.admins[username]);
-    let welcomeOrNothing = <div>Welcome, {username}!</div>;
+    let welcomeOrNothing = (
+      <div className="navbar-welcome">Welcome, {username}!</div>
+    );
     if (!this.props.loggedIn) {
       welcomeOrNothing = null;
     } else if (this.props.loggedIn && this.props.admins[username]) {
       console.log("admin", this.props.admins[username]);
-      welcomeOrNothing = <div>[Admin Privilege]Welcome, {username}!</div>;
+      welcomeOrNothing = (
+        <div className="navbar-welcome">
+          [Admin Privilege]Welcome, {username}!
+        </div>
+      );
     }
     return welcomeOrNothing;
   };
 
   favoritesOrNothing = () => {
     let favoritesOrNothing = (
-      <Link to="/favorites">
-        <button>Favorites</button>
-      </Link>
+      <div>
+        <Link to="/favorites" id="nav" className="navbar-favorites">
+          Favorites
+        </Link>
+      </div>
     );
     if (!this.props.loggedIn) {
       favoritesOrNothing = null;
@@ -167,9 +185,11 @@ class unconnectedNavBar extends Component {
 
   myRecipesOrNothing = () => {
     let myRecipesOrNothing = (
-      <Link to="/myrecipes">
-        <button>My Recipes</button>
-      </Link>
+      <div>
+        <Link to="/myrecipes" id="nav" className="navbar-myrecipes">
+          My Recipes
+        </Link>
+      </div>
     );
     if (!this.props.loggedIn) {
       myRecipesOrNothing = null;
@@ -193,6 +213,7 @@ class unconnectedNavBar extends Component {
   };
 
   componentDidMount = async () => {
+    window.scrollTo(0, 0);
     await console.log("reloading admins");
     await this.reloadAdmins();
     await console.log("reloading states");
@@ -205,26 +226,39 @@ class unconnectedNavBar extends Component {
     await this.reloadFavoriteRecipes();
     await console.log("reloading promo recipe");
     await this.reloadPromoRecipe();
+    this.props.dispatch({ type: "set-searchInput", searchInput: "" });
     //this.reloadMessages();
   };
 
   render = () => {
     return (
-      <div className="container-nav">
-        <div className="nav-bar">
-          <div>{this.welcomeOrNothing()}</div>
-          <Link to="/">
-            <button>TasteShare</button>
-          </Link>{" "}
-          {/* Home button */}
-          <button onClick={this.turnRecipesOn}>Recipes!</button>
-          {/* Recipes button -- make it conditional render like Join */}
-          {this.myRecipesOrNothing()}
-          {this.favoritesOrNothing()}
-          {/* Favorites button */}
-          This is the navigation bar!
-          {this.joinOrLogout()} {/* renders Join or Logout button */}
-          <Search />
+      <div>
+        <div className="container-nav">
+          {<div className="welcome">{this.welcomeOrNothing()}</div>}
+          <div className="nav-bar">
+            <div className="navbar-brand">
+              <Link to="/" id="nav">
+                TasteShare
+              </Link>
+            </div>
+            {/* Home button */}
+            <div>
+              <a
+                className="navbar-recipes"
+                href="#"
+                id="nav"
+                onClick={this.turnRecipesOn}
+              >
+                Recipes!
+              </a>
+            </div>
+            {/* Recipes button -- make it conditional render like Join */}
+            {this.myRecipesOrNothing()}
+            {this.favoritesOrNothing()}
+            {/* Favorites button */}
+            {this.joinOrLogout()} {/* renders Join or Logout button */}
+            <Search />
+          </div>
         </div>
         <Join />{" "}
         {/* conditionnal rennder. if joinIsOpen is true, it will render; else it is null */}

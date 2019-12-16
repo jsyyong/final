@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "./NavBar.jsx";
+import Footer from "./Footer.jsx";
 import DeleteSingle from "./DeleteSingle.jsx";
 import { connect } from "react-redux";
 class unconnectedHomepage extends Component {
@@ -73,26 +74,53 @@ class unconnectedHomepage extends Component {
     return (
       <div className="containerAll">
         <NavBar />
-        <div>Welcome to my site!</div>
-        {this.props.promorecipe.map(recipes => (
-          <div key={"f" + recipes._id}>
-            <Link to={"/recipedetail/" + recipes._id}>
-              <img height="200px" src={recipes.imgPath} />
-            </Link>
-            {this.deleteOrNothing(recipes)}
+        <div className="contents">
+          <div className="banner">
+            <h2 id="banner-title">
+              <div>
+                <mark>Try This!</mark>
+              </div>
+              <div id="banner-text">
+                <mark>The only brownie that will </mark>
+              </div>
+              <div id="banner-text">
+                <mark>bring santa through</mark>
+              </div>
+              <div id="banner-text">
+                <mark>the chimney ( ͡° ͜ʖ ͡°)</mark>
+              </div>
+            </h2>
+
+            {this.props.promorecipe.map(recipes => (
+              <div key={"f" + recipes._id}>
+                <Link to={"/recipedetail/Promotional/" + recipes._id}>
+                  <img id="recipes" height="350px" src={recipes.imgPath} />
+                </Link>
+                {this.deleteOrNothing(recipes)}
+              </div>
+            ))}
           </div>
-        ))}
-        <div>Recent Recipes</div>
-        <div>
-          {this.props.recipes.map(recipes => (
-            <div key={"f" + recipes._id}>
-              <Link to={"/recipedetail/" + recipes._id}>
-                <img width="250px" src={recipes.imgPath} />
-              </Link>
-              {this.deleteOrNothing(recipes)}
-            </div>
-          ))}
+          <div className="rr-container">
+            <div className="rr">Recent Recipes</div>
+          </div>
+          <div className="the-child">
+            {this.props.recipes.map(recipes => (
+              <div key={"f" + recipes._id}>
+                <Link to={"/recipedetail/" + recipes._id}>
+                  <img
+                    width="250px"
+                    height="250px"
+                    id="recipes"
+                    src={recipes.imgPath}
+                  />
+                </Link>
+                <div>{recipes.recipetitle}</div>
+                {this.deleteOrNothing(recipes)}
+              </div>
+            ))}
+          </div>
         </div>
+        <Footer />
       </div>
     );
   };

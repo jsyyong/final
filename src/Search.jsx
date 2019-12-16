@@ -10,9 +10,9 @@ class UnconnectedSearch extends Component {
     };
   }
   submitHandler = async () => {
-    console.log("reloading search results", this.props.searchInput);
+    console.log("reloading search results33", this.props.searchInput);
     let response = await fetch(
-      "/searchResults?directions=" + this.props.searchInput,
+      "/searchResults?recipetitle=" + this.props.searchInput,
       { method: "POST" }
     );
     let body = await response.json();
@@ -40,11 +40,11 @@ class UnconnectedSearch extends Component {
   onSubmitOrNot = () => {
     let onSubmitOrNot = (
       <Link to="/searchResults">
-        <button>Go! false</button>
+        <button>Go!</button>
       </Link>
     );
     if (this.props.insideSearchResults)
-      onSubmitOrNot = <button onClick={this.submitHandler}>Go! true</button>;
+      onSubmitOrNot = <button onClick={this.submitHandler}>Go!</button>;
     return onSubmitOrNot;
   };
 

@@ -6,7 +6,7 @@ import DeleteSingle from "./DeleteSingle.jsx";
 import { connect } from "react-redux";
 import Footer from "./Footer.jsx";
 import { Link } from "react-router-dom";
-class unconnectedRecipeDetails extends Component {
+class unconnectedRecipePromotional extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -62,17 +62,7 @@ class unconnectedRecipeDetails extends Component {
     let recipe = body.filter(objects => {
       return objects._id === recipeId;
     });
-    if (recipe.length === 0) {
-      response = await fetch("/favoriterecipes", {
-        method: "POST"
-      });
-      body = await response.text();
-      body = JSON.parse(body);
-      console.log("/favoriterecipes response", body);
-      recipe = body.filter(objects => {
-        return objects.oldId === recipeId;
-      });
-    }
+
     if (recipe.length === 0) {
       response = await fetch("/promorecipe", {
         method: "POST"
@@ -271,5 +261,5 @@ let mapStateToProps = state => {
     admins: state.admins
   };
 };
-let RecipeDetails = connect(mapStateToProps)(unconnectedRecipeDetails);
-export default RecipeDetails;
+let RecipePromotional = connect(mapStateToProps)(unconnectedRecipePromotional);
+export default RecipePromotional;

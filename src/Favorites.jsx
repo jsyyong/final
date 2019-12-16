@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import NavBar from "./NavBar.jsx";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import Footer from "./Footer.jsx";
 import DeleteSingleFavorite from "./DeleteSingleFavorite.jsx";
 import DeleteSingle from "./DeleteSingle.jsx";
 class unconnectedFavorites extends Component {
   deleteOrNothing = recipes => {
     let username = this.props.username;
-    let deleteOrNothing = <DeleteSingleFavorite recipe={recipes} />;
+    let deleteOrNothing = <DeleteSingleFavorite RECIPE={recipes} />;
     return deleteOrNothing;
   };
   deleteOrNothing2 = recipes => {
@@ -29,15 +30,21 @@ class unconnectedFavorites extends Component {
 
   favoriteOrMsg = () => {
     let favoriteOrMsg = (
-      <div>
+      <div className="the-child">
         {this.props.favoriterecipe.map(recipes => (
           <div key={"f" + recipes._id}>
             <Link to={"/recipedetail/" + recipes.oldId}>
               {" "}
               {/* need to pass the old object ID */}
-              <img width="250px" src={recipes.imgPath} />
+              <img
+                id="recipes"
+                width="250px"
+                height="250px"
+                src={recipes.imgPath}
+              />
             </Link>
-            {this.deleteOrNothing(recipes)}
+            <div>{recipes.recipetitle}</div>
+            <div>{this.deleteOrNothing(recipes)}</div>
           </div>
         ))}
       </div>
@@ -45,7 +52,7 @@ class unconnectedFavorites extends Component {
     if (this.props.favoriterecipe.length === 0)
       favoriteOrMsg = (
         <div>
-          <h3>Currently Empty :(</h3>
+          <h3 className="banner">Currently Empty :(</h3>
         </div>
       );
     return favoriteOrMsg;
@@ -62,17 +69,28 @@ class unconnectedFavorites extends Component {
     return (
       <div>
         <NavBar />
-        Welcome to the Favorites page!!
+        <h2 className="banner">Your Favorites</h2>
         {this.favoriteOrMsg()}
-        <div>Recent Recipes</div>
-        {this.props.recipes.map(recipes => (
-          <div key={"f" + recipes._id}>
-            <Link to={"/recipedetail/" + recipes._id}>
-              <img width="250px" src={recipes.imgPath} />
-            </Link>
-            {this.deleteOrNothing2(recipes)}
-          </div>
-        ))}
+        <div className="rr-container">
+          <div className="rr">Recent Recipes</div>
+        </div>
+        <div className="the-child">
+          {this.props.recipes.map(recipes => (
+            <div key={"f" + recipes._id}>
+              <Link name="top" to={"/recipedetail/" + recipes._id}>
+                <img
+                  id="recipes"
+                  width="250px"
+                  height="250px"
+                  src={recipes.imgPath}
+                />
+              </Link>
+              <div>{recipes.recipetitle}</div>
+              {this.deleteOrNothing2(recipes)}
+            </div>
+          ))}
+        </div>
+        <Footer />
       </div>
     );
   };

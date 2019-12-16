@@ -75,6 +75,7 @@ let reducer = (state, action) => {
   }
 
   if (action.type === "search-query") {
+    //not used anymore
     return { ...state, searchQuery: action.searchQuery };
   }
 

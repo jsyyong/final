@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import NavBar from "./NavBar.jsx";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import Footer from "./Footer.jsx";
 import DeleteSingle from "./DeleteSingle.jsx";
 class unconnectedMyRecipes extends Component {
   reloadUserRecipes = async () => {
@@ -47,20 +48,28 @@ class unconnectedMyRecipes extends Component {
   myRecipesOrMsg = () => {
     let myRecipesOrMsg = (
       <div>
-        {this.props.userrecipe.map(recipes => (
-          <div key={"f" + recipes._id}>
-            <Link to={"/recipedetail/" + recipes._id}>
-              <img width="250px" src={recipes.imgPath} />
-            </Link>
-            {this.deleteOrNothing(recipes)}
-          </div>
-        ))}
+        <div className="the-child">
+          {this.props.userrecipe.map(recipes => (
+            <div key={"f" + recipes._id}>
+              <Link to={"/recipedetail/" + recipes._id}>
+                <img
+                  id="recipes"
+                  width="250px"
+                  height="250px"
+                  src={recipes.imgPath}
+                />
+              </Link>
+              <div>{recipes.recipetitle}</div>
+              <div>{this.deleteOrNothing(recipes)}</div>
+            </div>
+          ))}
+        </div>
       </div>
     );
     if (this.props.userrecipe.length === 0)
       myRecipesOrMsg = (
         <div>
-          <h3>Currently Empty :(</h3>
+          <h3 className="banner">Currently Empty :(</h3>
         </div>
       );
     return myRecipesOrMsg;
@@ -70,21 +79,36 @@ class unconnectedMyRecipes extends Component {
     return (
       <div>
         <NavBar />
-        <div>Welcome to your recipes page!!</div>
+        <h2 className="banner">Your Recipes</h2>
         {this.myRecipesOrMsg()}
-        <div>
-          Have a recipe of your own to share?{" "}
-          <Link to="/submitrecipe">Submit your recipe here.</Link>
-        </div>
-        <div>Recent Recipes</div>
-        {this.props.recipes.map(recipes => (
-          <div key={"f" + recipes._id}>
-            <Link to={"/recipedetail/" + recipes._id}>
-              <img width="250px" src={recipes.imgPath} />
-            </Link>
-            {this.deleteOrNothing2(recipes)}
+        <div className="submit-container">
+          <h2 id="text">Submit a recipe to TasteShare!</h2>
+          <div id="text">
+            Have a recipe of your own to share?{" "}
+            <Link to="/submitrecipe">Submit your recipe here.</Link>
           </div>
-        ))}
+        </div>
+
+        <div className="rr-container">
+          <div className="rr">Recent Recipes!</div>
+        </div>
+        <div className="the-child">
+          {this.props.recipes.map(recipes => (
+            <div key={"f" + recipes._id}>
+              <Link to={"/recipedetail/" + recipes._id}>
+                <img
+                  id="recipes"
+                  width="250px"
+                  height="250px"
+                  src={recipes.imgPath}
+                />
+              </Link>
+              <div>{recipes.recipetitle}</div>
+              <div>{this.deleteOrNothing2(recipes)}</div>
+            </div>
+          ))}
+        </div>
+        <Footer />
       </div>
     );
   };

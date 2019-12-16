@@ -64,17 +64,17 @@ class unconnectedMessages extends Component {
 
   render = () => {
     let msgToElementAdmin = e => (
-      <div>
+      <div className="chat">
         [Admin Privilege] {e.username} wrote: {e.message}{" "}
         {<DeleteSingleMessage ID={e._id} IMGPATH={this.props.IMGPATH} />}
       </div>
     );
     let msgToElement = e => (
-      <div>
+      <div className="chat">
         {e.username} wrote: {e.message}{" "}
       </div>
     );
-    if (this.props.username === "jeff" || this.props.username === "admin") {
+    if (this.props.admins[this.props.username]) {
       return (
         <div class="two-col">
           <div>{this.props.messages.map(msgToElementAdmin)}</div>
@@ -94,7 +94,8 @@ let mapStatetoProps = state => {
   return {
     recipes: state.recipes,
     username: state.username,
-    messages: state.messages
+    messages: state.messages,
+    admins: state.admins
   };
 };
 let Messages = connect(mapStatetoProps)(unconnectedMessages);

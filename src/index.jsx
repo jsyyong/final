@@ -4,6 +4,7 @@ import App from "./App.jsx";
 import React from "react";
 import store from "./store.js";
 import { Provider } from "react-redux";
+import ScrollToTop from "./ScrollToTop.jsx";
 import reloadMagic from "./reload-magic-client.js"; // automatic reload
 reloadMagic(); // automatic reload
 

@@ -37,7 +37,7 @@ app.post("/searchResults", (req, res) => {
   console.log("queryString", req.query);
   dbo
     .collection("recipes")
-    .find({ directions: { $regex: req.query.directions } })
+    .find({ recipetitle: { $regex: req.query.recipetitle } })
     .toArray((err, recipes) => {
       if (err) {
         console.log("error", err);
