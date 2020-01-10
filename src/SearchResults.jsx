@@ -8,7 +8,7 @@ class unconnectedSearchResults extends Component {
   reloadSearchResults = async () => {
     console.log("reloading search results", this.props.searchInput);
     let response = await fetch(
-      "/searchResults?recipetitle=" + this.props.searchInput,
+      "/searchResults?lowercasetitle=" + this.props.searchInput.toLowerCase(),
       { method: "POST" }
     );
     let body = await response.json();

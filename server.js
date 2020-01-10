@@ -37,7 +37,7 @@ app.post("/searchResults", (req, res) => {
   console.log("queryString", req.query);
   dbo
     .collection("recipes")
-    .find({ recipetitle: { $regex: req.query.recipetitle } })
+    .find({ lowercasetitle: { $regex: req.query.lowercasetitle } })
     .toArray((err, recipes) => {
       if (err) {
         console.log("error", err);
@@ -343,6 +343,7 @@ app.post("/createRecipe", upload.single("file"), (req, res) => {
   let firstname = req.body.firstname;
   let lastname = req.body.lastname;
   let recipetitle = req.body.recipetitle;
+  let lowercasetitle = req.body.lowercasetitle;
   let numberofservings = req.body.numberofservings;
   let ingredients = req.body.ingredients;
   let directions = req.body.directions;
@@ -353,6 +354,7 @@ app.post("/createRecipe", upload.single("file"), (req, res) => {
     firstname: firstname,
     lastname: lastname,
     recipetitle: recipetitle,
+    lowercasetitle: lowercasetitle,
     numberofservings: numberofservings,
     ingredients: ingredients,
     directions: directions,
@@ -368,6 +370,7 @@ app.post("/createFavoriteRecipe", upload.none(), (req, res) => {
   let firstname = req.body.firstname;
   let lastname = req.body.lastname;
   let recipetitle = req.body.recipetitle;
+  let lowercasetitle = req.body.lowercasetitle;
   let numberofservings = req.body.numberofservings;
   let ingredients = req.body.ingredients;
   let directions = req.body.directions;
@@ -378,6 +381,7 @@ app.post("/createFavoriteRecipe", upload.none(), (req, res) => {
     firstname: firstname,
     lastname: lastname,
     recipetitle: recipetitle,
+    lowercasetitle: lowercasetitle,
     numberofservings: numberofservings,
     ingredients: ingredients,
     directions: directions,

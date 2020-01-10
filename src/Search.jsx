@@ -12,7 +12,7 @@ class UnconnectedSearch extends Component {
   submitHandler = async () => {
     console.log("reloading search results33", this.props.searchInput);
     let response = await fetch(
-      "/searchResults?recipetitle=" + this.props.searchInput,
+      "/searchResults?lowercasetitle=" + this.props.searchInput.toLowerCase(),
       { method: "POST" }
     );
     let body = await response.json();

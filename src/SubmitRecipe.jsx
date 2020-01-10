@@ -34,6 +34,7 @@ class unconnectedsubmitRecipe extends Component {
     data.append("firstname", this.state.firstname);
     data.append("lastname", this.state.lastname);
     data.append("recipetitle", this.state.recipetitle);
+    data.append("lowercasetitle", this.state.recipetitle.toLowerCase());
     data.append("numberofservings", this.state.numberofservings);
     data.append("ingredients", this.state.ingredients);
     data.append("directions", this.state.directions);
@@ -87,9 +88,16 @@ class unconnectedsubmitRecipe extends Component {
     this.setState({ file: event.target.files[0] });
   };
 
+  submitLoading = () => {
+    return null;
+  };
+
   renderAdminSubmit = () => {
     let renderAdminSubmit = (
-      <button onClick={this.submitHandlerAdmin}>Submit as Promotional</button>
+      <div>
+        <button onClick={this.submitHandlerAdmin}>Submit as Promotional</button>
+        <button onClick={this.submitLoading}>Submit Loading Image</button>
+      </div>
     );
     if (!this.props.admins[this.props.username]) renderAdminSubmit = null;
     return renderAdminSubmit;

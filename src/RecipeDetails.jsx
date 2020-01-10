@@ -177,10 +177,10 @@ class unconnectedRecipeDetails extends Component {
   preparation = str => {
     console.log("string:", str);
     return str
-      ? str.split("/").map(step => {
+      ? str.split("\n").map(step => {
           return <li id="step">{step}</li>;
         })
-      : "err";
+      : "Loading..."; // Create a Loading Component :D
   };
   serving = () => {
     let serving = "servings";
