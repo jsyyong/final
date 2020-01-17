@@ -29,6 +29,7 @@
     "@babel/plugin-proposal-class-properties": "^7.3.4",
     "chokidar": "^3.0.0",
     "cookie-parser": "^1.4.4",
+    "discord.js": "^11.5.1",
     "express": "^4.17.1",
     "mongodb": "^3.3.5",
     "multer": "^1.4.2",
@@ -36,6 +37,7 @@
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.4",
     "shelljs": "^0.8.3",
+    "underscore": "^1.9.1",
     "webpack-inject-plugin": "^1.5.0",
     "ws": "^7.0.0"
   }

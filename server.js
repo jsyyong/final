@@ -158,6 +158,7 @@ app.post("/signup", upload.none(), (req, res) => {
   //checks to see if the username exists in the database
   dbo.collection("users").findOne({ username: name }, (err, user) => {
     if (err || user !== null) {
+      //user is the object
       console.log("/login error", err);
       res.send(JSON.stringify({ success: false }));
       return;

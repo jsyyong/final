@@ -4,6 +4,7 @@ import NavBar from "./NavBar.jsx";
 import Footer from "./Footer.jsx";
 import DeleteSingle from "./DeleteSingle.jsx";
 import { connect } from "react-redux";
+
 class unconnectedHomepage extends Component {
   //reload method to reload state by sending fetch requests
   reload = async () => {
@@ -104,7 +105,8 @@ class unconnectedHomepage extends Component {
             <div className="rr">Recent Recipes</div>
           </div>
           <div className="the-child">
-            {this.props.recipes.map(recipes => (
+            {
+            this.props.recipes.map(recipes => (
               <div key={"f" + recipes._id}>
                 <Link to={"/recipedetail/" + recipes._id}>
                   <img

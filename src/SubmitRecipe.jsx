@@ -45,6 +45,7 @@ class unconnectedsubmitRecipe extends Component {
     });
     this.setState({ file: "" });
     this.setState({ firstname: "" });
+    this.setState({ lastname: "" });
     this.setState({ recipetitle: "" });
     this.setState({ numberofservings: "" });
     this.setState({ ingredients: "" });

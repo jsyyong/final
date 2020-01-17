@@ -42,7 +42,7 @@ class unconnectedNavBar extends Component {
     let body = await response.text();
     body = JSON.parse(body);
     console.log("/recipes response", body);
-    this.props.dispatch({ type: "set-recipe", recipes: body });
+    this.props.dispatch({ type: "set-recipe", recipes: body.reverse() });
   };
 
   reloadMessages = async () => {
@@ -234,7 +234,7 @@ class unconnectedNavBar extends Component {
     return (
       <div>
         <div className="container-nav">
-          {<div className="welcome">{this.welcomeOrNothing()}</div>}
+          <div className="welcome">{this.welcomeOrNothing()}</div>
           <div className="nav-bar">
             <div className="navbar-brand">
               <Link to="/" id="nav">
